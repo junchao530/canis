@@ -14,7 +14,7 @@ const CountryShowcase = ({ selectedCountryCode, selectedCountryName, filteredRes
     };
 
     const scrollableListStyle = {
-        maxHeight: '700px',
+        maxHeight: '650px',
         overflow: 'auto',
     };
 
@@ -23,7 +23,7 @@ const CountryShowcase = ({ selectedCountryCode, selectedCountryName, filteredRes
     };
     return (
         <div style={containerStyle}>
-            <h1>{selectedCountryName ? `Companies in ${selectedCountryName}` : 'Country Counter'}</h1>
+            <h1>{selectedCountryName ? `Media Companies in ${selectedCountryName}` : 'Country Counter'}</h1>
             <div style={scrollableListStyle}>
                 {selectedCountryCode && filteredResults.map(({ parentCompany, childEntity, countries }, index) => (
                     <div key={index}>
