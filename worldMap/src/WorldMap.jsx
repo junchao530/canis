@@ -1,10 +1,12 @@
 import { VectorMap } from '@react-jvectormap/core'
 import { worldMill } from '@react-jvectormap/world'
 import React from 'react'
-import { colorScale, countries } from './Countries'
 import SearchBar from './button'
+import { useCountries, colorScale} from './Countries'
 
 function WorldMap() {
+  const {countries,setCountries} = useCountries();
+
   return (
     <div style={{ display: 'flex', paddingTop: '40px', margin: 'auto', width: '1200px', height: '600px' }}>
       <div style={{ flex: 1 }}>
@@ -41,7 +43,7 @@ function WorldMap() {
         />
       </div>
       <div style={{ flex: 1, paddingLeft: '20px' }}>
-        <SearchBar/>
+        <SearchBar setCountries={setCountries}/> {/* Pass setCountries as a prop to search bar*/}
       </div>
     </div>
   );
