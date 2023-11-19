@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import parentCompaniesData from './final_data_with_cn_provinces.json';
+import reprocessedData from './reprocessed_organization_data.json'; // Ensure this path is correct
 import { useCountries } from './Countries';
 
 const SearchBar = ({ setCountries }) => {
@@ -12,9 +12,9 @@ const SearchBar = ({ setCountries }) => {
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
         if (event.target.value !== '') {
-            const results = Object.keys(parentCompaniesData)
-                .filter(company =>
-                    company.toLowerCase().includes(event.target.value.toLowerCase())
+            const results = Object.keys(reprocessedData)
+                .filter(parentCompany =>
+                    parentCompany.toLowerCase().includes(event.target.value.toLowerCase())
                 );
             setSearchResults(results);
         } else {
@@ -22,33 +22,33 @@ const SearchBar = ({ setCountries }) => {
         }
     };
 
-    const handleParentCompanyClick = (company) => {
-        setSelectedParentCompany(company);
-        updateCountries(company);
+    const handleParentCompanyClick = (parentCompany) => {
+        setSelectedParentCompany(parentCompany);
+        updateCountries(parentCompany);
     };
 
     const updateCountries = (parentCompany) => {
         let updatedCountries = { ...countries };
 
         // Zero out list before updating
-        Object.keys(updatedCountries).forEach((country) => {
-            updatedCountries[country] = 0;
+        Object.keys(updatedCountries).forEach((countryCode) => {
+            updatedCountries[countryCode] = 0;
         });
 
-        const companyCountries = parentCompaniesData[parentCompany];
-        Object.keys(companyCountries).forEach((childCompany) => {
-            const countryData = companyCountries[childCompany];
-            const countryCodes = Array.isArray(countryData) ? countryData : [countryData];
-            countryCodes.forEach((code) => {
-                if (updatedCountries.hasOwnProperty(code)) {
-                    updatedCountries[code] = 255;
-                }
+        if (reprocessedData.hasOwnProperty(parentCompany)) {
+            const childCompanies = reprocessedData[parentCompany];
+            Object.keys(childCompanies).forEach((childCompany) => {
+                const { Countries: countryCodes, Followers: followerCount } = childCompanies[childCompany];
+                countryCodes.forEach((code) => {
+                    if (updatedCountries.hasOwnProperty(code)) {
+                        updatedCountries[code] += followerCount;
+                    }
+                });
             });
-        });
+        }
 
         setCountries(updatedCountries);
     };
-
     const containerStyle = {
         background: 'rgb(40, 44, 52)',
         border: '1px solid',
@@ -110,6 +110,7 @@ const SearchBar = ({ setCountries }) => {
         fontWeight: 'bold',
         color: activeMenu === 'Sentiment Analysis' ? 'yourColorCodeForSentiment' : 'white',
         marginBottom: '10px',
+        marginTop: '30px',
     };
 
     const sentimentAnalysisStyle = {
@@ -123,15 +124,15 @@ const SearchBar = ({ setCountries }) => {
     };
 
     return (
-     <div style={containerStyle}>
+        <div style={containerStyle}>
             <div style={buttonContainerStyle}>
-            <div style={clickableTextStyle} onClick={() => handleMenuToggle('Monopoly')}>
-                Monopoly Index
+                <div style={clickableTextStyle} onClick={() => handleMenuToggle('Monopoly')}>
+                    Monopoly Index
+                </div>
+                <div style={sentimentAnalysisStyle} onClick={() => handleMenuToggle('Sentiment Analysis')}>
+                    Sentiment Analysis
+                </div>
             </div>
-            <div style={sentimentAnalysisStyle} onClick={() => handleMenuToggle('Sentiment Analysis')}>
-                Sentiment Analysis
-            </div>
-        </div>
             <input
                 type="text"
                 placeholder="Search for parent companies..."
@@ -148,7 +149,7 @@ const SearchBar = ({ setCountries }) => {
                     ))
                 }
                 {activeMenu === 'Sentiment Analysis' && (
-                    /* PUT Code for Sentimenet Analsyis Render here */
+                    /* PUT Code for Sentiment Analysis Render here */
                     searchResults.map((result, index) => (
                         <div key={index} style={resultItemStyle} onClick={() => handleParentCompanyClick(result)}>
                             {result}
@@ -160,11 +161,11 @@ const SearchBar = ({ setCountries }) => {
                 <div>
                     <h2 style={childCompanyStyle}>{selectedParentCompany}</h2>
                     <ul style={scrollableListStyleSmall}>
-                        {Object.entries(parentCompaniesData[selectedParentCompany]).map(([childCompanyName, countryData], index) => {
-                            const countries = Array.isArray(countryData) ? countryData.join(', ') : countryData;
+                        {Object.entries(reprocessedData[selectedParentCompany]).map(([childCompanyName, data], index) => {
+                            const countries = Array.isArray(data.Countries) ? data.Countries.join(', ') : data.Countries;
                             return (
                                 <li key={index} style={childCompanyStyle}>
-                                    {childCompanyName} - {countries}
+                                    {childCompanyName} - {countries} - Followers: {data.Followers}
                                 </li>
                             );
                         })}
@@ -173,6 +174,7 @@ const SearchBar = ({ setCountries }) => {
             )}
         </div>
     );
+    
 };
 
 export default SearchBar;

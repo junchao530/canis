@@ -31,6 +31,10 @@ const getCountryNameFromCode = (code) => {
   return countryCodeToNameMap[code] || 'Unknown';
 
 };
+// const colorScale = {
+//   '0': '#FFFFFF', // White for zero value
+  
+// };
 
 const by_country = (countryCode) => {
   const results = [];
@@ -89,7 +93,7 @@ const by_country = (countryCode) => {
               {
                 scale: colorScale,
                 values: countries,
-                min: 0,
+                min:  Math.min(...Object.values(countries)),
                 max: Math.max(...Object.values(countries)),
               },
             ],
