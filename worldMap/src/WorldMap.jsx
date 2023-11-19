@@ -13,7 +13,7 @@ function WorldMap() {
   },[countries]);
 
   return (
-    <div style={{ display: 'flex', paddingTop: '40px', margin: 'auto', width: '1200px', height: '600px' }}>
+    <div style={{ display: 'flex', paddingTop: '40px', margin: 'auto', width: '1800px', height: '600px' }}>
       <div style={{ flex: 1 }}>
         <VectorMap
           key={mapKey} //Set key to force rerender
