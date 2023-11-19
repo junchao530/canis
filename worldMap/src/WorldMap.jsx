@@ -2,7 +2,7 @@ import { VectorMap } from '@react-jvectormap/core'
 import { worldMill } from '@react-jvectormap/world'
 import React from 'react'
 import { colorScale, countries } from './Countries'
-import CompanyButtonList from './button'
+import SearchBar from './button'
 
 function WorldMap() {
   return (
@@ -41,7 +41,7 @@ function WorldMap() {
         />
       </div>
       <div style={{ flex: 1, paddingLeft: '20px' }}>
-        <CompanyButtonList />
+        <SearchBar/>
       </div>
     </div>
   );

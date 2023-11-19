@@ -1,37 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react';
+import parentCompaniesData from './organization_data.json';
 
-const CompanyButton = ({ companyName, onClick }) => {
-    return (
-      <button onClick={onClick}>
-        {companyName}
-      </button>
-    );
-  };
-
-function button() {
-  return (
-    <div>button</div>
-  )
-}
-
-const CompanyButtonList = () => {
-    // Sample list of companies
-    const companies = ["Company1", "Company2", "Company3", "Company4", "Company5", "Company6", "Company7", "Company8", "Company9", "Company10"];
+const SearchBar = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedParentCompany, setSelectedParentCompany] = useState(null);
   
-    // Handle button click
-    const handleButtonClick = (companyName) => {
-      // Add your logic here for what happens when a button is clicked
-      console.log(`Button for ${companyName} clicked`);
+    const handleSearch = (event) => {
+      setSearchTerm(event.target.value);
+  
+      if (event.target.value !== '') {
+        const results = Object.keys(parentCompaniesData)
+          .filter(company =>
+            company.toLowerCase().includes(event.target.value.toLowerCase())
+          );
+        setSearchResults(results);
+      } else {
+        setSearchResults([]);
+      }
+    };
+  
+    const handleParentCompanyClick = (company) => {
+      setSelectedParentCompany(company);
+    };
+
+    const searchResultStyle = {
+        cursor: 'pointer',
+        color: 'white',
+        textDecoration: 'none',
+      };
+    
+      const childCompanyStyle = {
+        color: 'white',
+      };
+    const containerStyle = {
+      border: '1px solid white',
+      padding: '10px',
+      margin: '10px',
+      borderRadius: '5px',
+    };
+    
+    const scrollableListStyle = {
+        maxHeight: '200px', // Adjust the height as per your design
+        overflow: 'auto',
+        marginTop: '10px',
     };
   
     return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
-        <h2 style={{ gridColumn: 'span 5' }}>Company Buttons</h2>
-        {companies.map((company, index) => (
-          <CompanyButton key={index} companyName={company} onClick={() => handleButtonClick(company)} />
-        ))}
+      <div style={containerStyle}>
+        <input
+          type="text"
+          placeholder="Search for parent companies..."
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+        <div style={scrollableListStyle}>
+          {searchResults.map((result, index) => (
+            <div key={index} style={searchResultStyle} onClick={() => handleParentCompanyClick(result)}>
+              {result}
+            </div>
+          ))}
+        </div>
+        {selectedParentCompany && (
+          <div>
+            <h3 style={childCompanyStyle}> {selectedParentCompany}</h3>
+            <ul style={scrollableListStyle}>
+              {Object.keys(parentCompaniesData[selectedParentCompany]).map((childCompany, index) => (
+                <li key={index}  style={childCompanyStyle}>{childCompany}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   };
   
-  export default CompanyButtonList;
+  export default SearchBar;
