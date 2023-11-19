@@ -6,6 +6,7 @@ const SearchBar = ({ setCountries }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedParentCompany, setSelectedParentCompany] = useState(null);
+    const [activeMenu, setActiveMenu] = useState('Monopoly');
     const { countries } = useCountries();
 
     const handleSearch = (event) => {
@@ -56,6 +57,9 @@ const SearchBar = ({ setCountries }) => {
         width: '500px',
         height: '800px',
         color: 'white',
+        display: 'flex',
+        flexDirection: 'column', // Arrange items vertically
+        alignItems: 'center', // Center items horizontally
     };
 
     const inputStyle = {
@@ -74,6 +78,11 @@ const SearchBar = ({ setCountries }) => {
         overflow: 'auto',
     };
 
+    const handleMenuToggle = (menu) => {
+        setActiveMenu(menu);
+    };
+
+    
      const scrollableListStyleSmall= {
         marginTop: '20px',
         maxHeight: '200px',
@@ -83,15 +92,46 @@ const SearchBar = ({ setCountries }) => {
     const resultItemStyle = {
         cursor: 'pointer',
         marginBottom: '5px',
+        backgroundColor: activeMenu === 'Monopoly' ? 'yourColorCodeForMonopoly' : '',
+        color: activeMenu === 'Monopoly' ? 'yourTextColorForMonopoly' : '',
     };
+
+    const buttonContainerStyle = {
+        display: 'flex',
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        marginBottom: '10px', 
+    };
+
+    const clickableTextStyle = {
+        cursor: 'pointer',
+        fontSize: '24px',
+        textDecoration: activeMenu === 'Monopoly' ? 'underline' : 'none',
+        fontWeight: 'bold',
+        color: activeMenu === 'Sentiment Analysis' ? 'yourColorCodeForSentiment' : 'white',
+        marginBottom: '10px',
+    };
+
+    const sentimentAnalysisStyle = {
+    ...clickableTextStyle,
+    marginLeft: '20px', // Add left margin to create space between buttons
+    textDecoration: activeMenu === 'Sentiment Analysis' ? 'underline' : 'none',
+};
 
     const childCompanyStyle = {
         marginBottom: '5px',
     };
 
     return (
-        <div style={containerStyle}>
-            <h1>Monopoly Index</h1>
+     <div style={containerStyle}>
+            <div style={buttonContainerStyle}>
+            <div style={clickableTextStyle} onClick={() => handleMenuToggle('Monopoly')}>
+                Monopoly Index
+            </div>
+            <div style={sentimentAnalysisStyle} onClick={() => handleMenuToggle('Sentiment Analysis')}>
+                Sentiment Analysis
+            </div>
+        </div>
             <input
                 type="text"
                 placeholder="Search for parent companies..."
@@ -100,11 +140,21 @@ const SearchBar = ({ setCountries }) => {
                 style={inputStyle}
             />
             <div style={scrollableListStyle}>
-                {searchResults.map((result, index) => (
-                    <div key={index} style={resultItemStyle} onClick={() => handleParentCompanyClick(result)}>
-                        {result}
-                    </div>
-                ))}
+                {activeMenu === 'Monopoly' &&
+                    searchResults.map((result, index) => (
+                        <div key={index} style={resultItemStyle} onClick={() => handleParentCompanyClick(result)}>
+                            {result}
+                        </div>
+                    ))
+                }
+                {activeMenu === 'Sentiment Analysis' && (
+                    /* PUT Code for Sentimenet Analsyis Render here */
+                    searchResults.map((result, index) => (
+                        <div key={index} style={resultItemStyle} onClick={() => handleParentCompanyClick(result)}>
+                            {result}
+                        </div>
+                    ))
+                )}
             </div>
             {selectedParentCompany && (
                 <div>
