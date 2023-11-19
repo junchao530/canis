@@ -48,49 +48,68 @@ const SearchBar = ({ setCountries }) => {
         setCountries(updatedCountries);
     };
 
-    const searchResultStyle = {
-        cursor: 'pointer',
-        color: 'white',
-        textDecoration: 'none',
-    };
-
-    const childCompanyStyle = {
-        color: 'white',
-    };
-
     const containerStyle = {
-        border: '1px solid white',
-        // padding: '10px',
-        // margin: '10px',
+        background: 'rgb(40, 44, 52)',
+        border: '1px solid',
+        borderRadius: '10px',
+
+        width: '500px',
+        height: '800px',
+        color: 'white',
+    };
+
+    const inputStyle = {
+        background: 'rgb(63, 70, 82)',
+        border: 'none',
         borderRadius: '5px',
-        height: '600px'
+        color: 'white',
+        padding: '10px',
+        width: '75%',
+        marginBottom: '10px',
     };
 
     const scrollableListStyle = {
-        maxHeight: '200px', // Adjust the height as per your design
+        marginTop: '20px',
+        maxHeight: '300px',
         overflow: 'auto',
-        marginTop: '10px',
+    };
+
+     const scrollableListStyleSmall= {
+        marginTop: '20px',
+        maxHeight: '200px',
+        overflow: 'auto',
+    };
+
+    const resultItemStyle = {
+        cursor: 'pointer',
+        marginBottom: '5px',
+    };
+
+    const childCompanyStyle = {
+        marginBottom: '5px',
     };
 
     return (
         <div style={containerStyle}>
+            <h1>Monopoly Index</h1>
             <input
                 type="text"
                 placeholder="Search for parent companies..."
                 value={searchTerm}
                 onChange={handleSearch}
+                style={inputStyle}
             />
             <div style={scrollableListStyle}>
                 {searchResults.map((result, index) => (
-                    <div key={index} style={searchResultStyle} onClick={() => handleParentCompanyClick(result)}>
+                    <div key={index} style={resultItemStyle} onClick={() => handleParentCompanyClick(result)}>
                         {result}
                     </div>
                 ))}
             </div>
             {selectedParentCompany && (
                 <div>
-                    <h3 style={childCompanyStyle}> {selectedParentCompany}</h3>
-                    <ul style={scrollableListStyle}>
+                    <h2 style={childCompanyStyle}>{selectedParentCompany}</h2>
+                    <ul style={scrollableListStyleSmall}>
                         {Object.entries(parentCompaniesData[selectedParentCompany]).map(([childCompanyName, countryData], index) => {
                             const countries = Array.isArray(countryData) ? countryData.join(', ') : countryData;
                             return (
