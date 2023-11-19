@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import parentCompaniesData from './organization_data.json';
+import { useCountries } from './Countries';
 
-const SearchBar = () => {
+const SearchBar = ({ setCountries }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedParentCompany, setSelectedParentCompany] = useState(null);
+    const {countries} = useCountries();
   
     const handleSearch = (event) => {
       setSearchTerm(event.target.value);
@@ -22,7 +24,27 @@ const SearchBar = () => {
   
     const handleParentCompanyClick = (company) => {
       setSelectedParentCompany(company);
+      updateCountries(company);
     };
+
+    const updateCountries = (parentCompany) => {
+      let updatedCountries = {...countries};
+      
+      //Zero out list before updating
+       Object.keys(updatedCountries).forEach((country) => {
+        updatedCountries[country] = 0;
+      });
+      
+      switch(parentCompany){
+        case "China Media Group (CMG)":
+          updatedCountries.CN = 255;
+          break;
+        default:
+          break;
+      }
+      setCountries(updatedCountries);
+
+    }
 
     const searchResultStyle = {
         cursor: 'pointer',
