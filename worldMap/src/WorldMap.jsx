@@ -6,6 +6,7 @@ import { useCountries, colorScale } from './Countries';
 import CountryShowcase from './counter';
 import parentCompaniesData from './final_data_with_cn_provinces.json'; // Adjust the path as necessary
 import countryCodeToNameMap from './conversion';
+import tweetData from './Twitter_Data_Enhanced.json'; // Adjust the path as needed
 
 function WorldMap() {
   const { countries, setCountries } = useCountries();
@@ -13,7 +14,8 @@ function WorldMap() {
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
   const [selectedCountryName, setSelectedCountryName] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
-  
+  const processedTweetData = processTweetData(tweetData);
+
   const handleRegionClick = (event, code) => {
     // The 'code' parameter should give us the country code directly
     setSelectedCountryCode(code);
