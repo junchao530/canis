@@ -1,2 +1,2 @@
 # Lida_exp
-Exploration of automated data visualization using Microsoft LIDA
+Exploration of query based automated data visualization and infographic generation.
