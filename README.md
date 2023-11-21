@@ -18,8 +18,8 @@ Welcome to the CANIS Data Visualization and Foreign Interference repository! Thi
 
 ### Features:
 
-- **Query-Based AI Visualizer**: Leverages Microsoft Azure's cognitive services and Streamlit for a conversational data exploration experience.
-- **Model Agnostic**: Ensures compatibility and flexibility across various machine learning models and frameworks.
+- **Query-Based AI Visualizer**: Built in Python this leverages Microsoft's new open source Lida repository and Streamlit for a conversational data exploration experience.
+- **Model Agnostic**: Ensures compatibility and flexibility across various machine learning models and frameworks. Can operate with HF models and locally ran models like Llama for added security if you don't wnat your data to hit OPENAI servers.
 
 ## Installation 🛠️
 
